@@ -1,0 +1,37 @@
+# Exclude common junk globally (applies to all hooks)
+exclude: ^(\.venv|venv|\.tox|build|dist|\.mypy_cache|\.ruff_cache|node_modules)/
+
+default_language_version:
+  python: python3.12
+
+repos:
+  # Quality-of-life checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-toml
+
+  # Ruff (lint + format) — remove --force-exclude, limit to project dirs
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        args: [--fix]                 # <-- no --force-exclude here
+        files: ^(os_tui|tests)/       # run only on our code
+      - id: ruff-format
+        files: ^(os_tui|tests)/
+
+  # Mypy — don’t let pre-commit pass filenames; we specify targets ourselves
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        pass_filenames: false         # <-- critical to avoid duplicates
+        args: [--config-file, mypy.ini, os_tui, tests]
+        # optional: pin deps for the hook env (helps avoid env drift)
+        additional_dependencies:
+          - typing-extensions==4.12.2
+          - mypy-extensions==1.0.0

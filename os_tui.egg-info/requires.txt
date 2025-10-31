@@ -1,0 +1,8 @@
+textual
+openstacksdk
+
+[dev]
+pytest
+ruff
+mypy
+pre-commit

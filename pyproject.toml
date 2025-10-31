@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "os-tui"
+version = "0.1.0"
+description = "Terminal UI for interacting with OpenStack"
+requires-python = ">=3.12"
+dependencies = [
+    "textual",
+    "openstacksdk",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy", "pre-commit"]
+
+[project.urls]
+Homepage = "https://example.com/os-tui"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["os_tui*"]
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py"]
+testpaths = ["tests"]
+addopts = ["-ra", "--color=yes"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["os_tui"]
+extend-exclude = [".venv", "venv", ".tox", "build", "dist", ".mypy_cache", ".ruff_cache", "node_modules"]
+
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+strict_equality = true
